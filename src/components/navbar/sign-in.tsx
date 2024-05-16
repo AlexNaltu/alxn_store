@@ -4,6 +4,7 @@ import Wrapper from "../wrapper/wrapper";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import AdminLink from "./admin";
 
 const SignIn = async () => {
   const session = await getServerAuthSession();
@@ -26,6 +27,7 @@ const SignIn = async () => {
           {session ? "Sign Out" : "Sign In"}
         </Button>
       </Link>
+      <AdminLink />
     </Wrapper>
   );
 };

@@ -22,19 +22,19 @@ const ProductsCard = ({
 }: Post) => {
   return (
     <>
-      <Card className=" flex max-w-[300px] flex-col items-center">
+      <Card className=" flex max-w-[300px]  flex-col items-center justify-between">
         <CardHeader>
           <Image
             src={image_url}
             alt={name}
-            width={400}
+            width={300}
             height={300}
             className="aspect-square cursor-pointer object-cover transition-transform duration-300 ease-in-out hover:scale-105"
           />
         </CardHeader>
         <CardContent>
           <CardTitle>{name}</CardTitle>
-          <CardDescription className="my-2 line-clamp-2">
+          <CardDescription className="my-2 line-clamp-1 ">
             {description}
           </CardDescription>
           <CardFooter className="flex flex-col gap-1">

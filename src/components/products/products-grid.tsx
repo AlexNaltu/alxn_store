@@ -2,7 +2,7 @@
 
 import { db } from "~/server/db";
 import React from "react";
-import { PageProps } from "~/app/page";
+import { PageProps } from "~/app/(routes)/(home)/page";
 
 import { Pagination } from "../pagination/pagination";
 import { revalidatePath } from "next/cache";

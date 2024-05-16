@@ -20,6 +20,10 @@ const config = {
         protocol: "https",
         hostname: "www.nanuko.de",
       },
+      {
+        protocol: "https",
+        hostname: "www.myconbini.com",
+      },
     ],
   },
 };

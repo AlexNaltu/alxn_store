@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ImageCarousel from "~/components/carousel/carousel";
 import { CreatePost } from "~/components/forms/create-post";
+import FeaturedProducts from "~/components/products/featured-products";
 import { ProductsGrid } from "~/components/products/products-grid";
 import Wrapper from "~/components/wrapper/wrapper";
 
@@ -21,7 +22,7 @@ export default async function Home(props: PageProps) {
           View All Products
         </Link>
       </Wrapper>
-      <ProductsGrid {...props} />
+      <FeaturedProducts />
     </div>
   );
 }
