@@ -6,80 +6,115 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
-export function CreatePost() {
+export default function CreatePost() {
   const router = useRouter();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
-  const [image_url, setImageUrl] = useState("");
-  const [isInStock, setIsInStock] = useState(false);
+  const [product, setProduct] = useState({
+    name: "",
+    description: "",
+    price: 0,
+    image_url: "",
+    isInStock: false,
+    quantity: 0,
+    categoryId: "",
+  });
 
   const createPost = api.post.create.useMutation({
     onSuccess: () => {
       router.refresh();
-      setName("");
-      setDescription("");
-      setPrice(0);
-      setImageUrl("");
-      setIsInStock(false);
+      setProduct({
+        name: " ",
+        description: " ",
+        price: 0,
+        image_url: " ",
+        isInStock: false,
+        quantity: 0,
+        categoryId: " ",
+      });
     },
   });
+
+  const category = api.categories.getCategories.useQuery().data ?? [];
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        createPost.mutate({ name, description, price, image_url, isInStock });
+        createPost.mutate(product);
       }}
-      className="post_form mx-auto my-10 flex max-w-md flex-col gap-4 rounded-lg border-2 border-black p-5"
+      className="mx-auto mt-4 max-w-sm rounded bg-white p-4 shadow-md"
     >
-      <label>Name</label>
-      <input
+      <Label>Name</Label>
+      <Input
         type="text"
         placeholder="Name"
-        value={name}
-        className="w-full rounded-full px-4 py-2 text-black"
-        onChange={(e) => setName(e.target.value)}
+        value={product.name}
+        onChange={(e) => setProduct({ ...product, name: e.target.value })}
       />
-      <label>Description</label>
-
-      <input
+      <Label>Description</Label>
+      <Input
         type="text"
         placeholder="Description"
-        value={description}
-        className="w-full rounded-full px-4 py-2 text-black"
-        onChange={(e) => setDescription(e.target.value)}
+        value={product.description}
+        onChange={(e) =>
+          setProduct({ ...product, description: e.target.value })
+        }
       />
-      <label>Price</label>
-
-      <input
+      <Label>Image</Label>
+      <Input
+        type="text"
+        placeholder="Image"
+        value={product.image_url}
+        onChange={(e) => setProduct({ ...product, image_url: e.target.value })}
+      />
+      <Label>Price</Label>
+      <Input
         type="number"
         placeholder="Price"
-        value={price}
-        className="w-full rounded-full px-4 py-2 text-black"
-        onChange={(e) => setPrice(parseInt(e.target.value))}
+        value={product.price}
+        onChange={(e) =>
+          setProduct({ ...product, price: parseInt(e.target.value) })
+        }
       />
-      <label>Image</label>
-
-      <input
-        type="text"
-        placeholder=" Image Url"
-        value={image_url}
-        className="w-full rounded-full px-4 py-2 text-black"
-        onChange={(e) => setImageUrl(e.target.value)}
+      <Label>Quantity</Label>
+      <Input
+        type="number"
+        placeholder="Quantity"
+        value={product.quantity}
+        onChange={(e) =>
+          setProduct({ ...product, quantity: parseInt(e.target.value) })
+        }
       />
+      <div className="my-2 flex items-center gap-2">
+        <Label>Availible</Label>
+        <Checkbox
+          onCheckedChange={() => setProduct({ ...product, isInStock: true })}
+        />
+      </div>
+      <div className="flex items-center gap-4">
+        <Label>Category</Label>
 
-      <div className="flex items-center justify-between">
-        <label>Is in stock?</label>
-        <Checkbox onCheckedChange={() => setIsInStock(true)} />
+        <select
+          value={product.categoryId}
+          onChange={(e) =>
+            setProduct({ ...product, categoryId: e.target.value })
+          }
+        >
+          {category.map((cat) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
       </div>
       <Button
         type="submit"
-        className="rounded-full"
         disabled={createPost.isPending}
+        className="my-2 w-full"
       >
-        {createPost.isPending ? "Submitting..." : "Submit"}
+        {createPost.isPending ? "Creating..." : "Submit"}
       </Button>
     </form>
   );

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { createProductSchema } from "~/helpers/productRouteSchema";
 
 import {
   createTRPCRouter,
@@ -6,7 +7,9 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 
+//post router
 export const postRouter = createTRPCRouter({
+  //create product procedure
   create: protectedProcedure
     .input(
       z.object({
@@ -15,6 +18,8 @@ export const postRouter = createTRPCRouter({
         price: z.coerce.number().int().min(1),
         image_url: z.string().min(1),
         isInStock: z.boolean(),
+        quantity: z.coerce.number().int().min(1),
+        categoryId: z.string().min(1),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -28,14 +33,49 @@ export const postRouter = createTRPCRouter({
           price: input.price,
           image_url: input.image_url,
           isInStock: input.isInStock,
+          quantity: input.quantity,
+          category: {
+            connect: {
+              id: input.categoryId,
+            },
+          },
+        },
+      });
+    }),
+  //update product procedure
+  updateProduct: protectedProcedure
+    .input(createProductSchema.extend({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...updatedData } = input;
+      return ctx.db.post.update({
+        where: { id },
+        data: {
+          ...updatedData,
         },
       });
     }),
 
+  //delete product procedure
+  deleteProduct: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.post.delete({
+        where: { id: input.id },
+      });
+    }),
+
+  //get latest products
   getLatest: publicProcedure.query(({ ctx }) => {
     return ctx.db.post.findMany({
       orderBy: { createdAt: "desc" },
       take: 4,
+      where: {
+        category: {
+          name: {
+            contains: "Milsugi",
+          },
+        },
+      },
     });
   }),
 });

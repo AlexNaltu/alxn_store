@@ -19,6 +19,8 @@ const ProductsCard = ({
   price,
   image_url,
   isInStock,
+  quantity,
+  categoryId,
 }: Post) => {
   return (
     <>

@@ -5,12 +5,9 @@ import FeaturedProducts from "~/components/products/featured-products";
 import { ProductsGrid } from "~/components/products/products-grid";
 import Wrapper from "~/components/wrapper/wrapper";
 
-export type PageProps = {
-  params: { [key: string]: string | string[] | undefined };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
 
-export default async function Home(props: PageProps) {
+
+export default async function Home() {
   return (
     <div>
       <ImageCarousel />
