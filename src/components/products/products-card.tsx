@@ -20,7 +20,7 @@ const ProductsCard = ({
   image_url,
   isInStock,
   quantity,
-  categoryId,
+  category,
 }: Post) => {
   return (
     <>

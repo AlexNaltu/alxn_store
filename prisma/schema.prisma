@@ -25,16 +25,16 @@ model Post {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime? @updatedAt
 
-    category   Category @relation(fields: [categoryId], references: [id])
-    categoryId String
-
+    category   Category 
     @@index([name])
 }
 
-model Category {
-    id    String @id @default(cuid())
-    name  String @unique
-    posts Post[]
+enum Category {
+    Sushi
+    Ramen
+    Snacks
+    Sauces
+    Fresh
 }
 
 // Necessary for Next auth

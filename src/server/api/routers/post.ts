@@ -1,3 +1,4 @@
+import { Category } from "@prisma/client";
 import { z } from "zod";
 import { createProductSchema } from "~/helpers/productRouteSchema";
 
@@ -19,7 +20,7 @@ export const postRouter = createTRPCRouter({
         image_url: z.string().min(1),
         isInStock: z.boolean(),
         quantity: z.coerce.number().int().min(1),
-        categoryId: z.string().min(1),
+        category: z.enum(["Sushi", "Ramen", "Snacks", "Sauces", "Fresh"]),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -34,11 +35,7 @@ export const postRouter = createTRPCRouter({
           image_url: input.image_url,
           isInStock: input.isInStock,
           quantity: input.quantity,
-          category: {
-            connect: {
-              id: input.categoryId,
-            },
-          },
+          category: input.category,
         },
       });
     }),
@@ -69,13 +66,10 @@ export const postRouter = createTRPCRouter({
     return ctx.db.post.findMany({
       orderBy: { createdAt: "desc" },
       take: 4,
-      where: {
-        category: {
-          name: {
-            contains: "Milsugi",
-          },
-        },
-      },
     });
+  }),
+
+  getCategories: publicProcedure.query(({ ctx }) => {
+    return ctx.db.post.findMany({});
   }),
 });

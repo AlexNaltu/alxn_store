@@ -8,17 +8,28 @@ import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Category } from "@prisma/client";
+
+type Product = {
+  name: string;
+  description: string;
+  price: number;
+  image_url: string;
+  isInStock: boolean;
+  quantity: number;
+  category: Category;
+};
 
 export default function CreatePost() {
   const router = useRouter();
-  const [product, setProduct] = useState({
+  const [product, setProduct] = useState<Product>({
     name: "",
     description: "",
     price: 0,
     image_url: "",
     isInStock: false,
     quantity: 0,
-    categoryId: "",
+    category: Category.Sushi,
   });
 
   const createPost = api.post.create.useMutation({
@@ -31,12 +42,10 @@ export default function CreatePost() {
         image_url: " ",
         isInStock: false,
         quantity: 0,
-        categoryId: " ",
+        category: Category.Sushi,
       });
     },
   });
-
-  const category = api.categories.getCategories.useQuery().data ?? [];
 
   return (
     <form
@@ -97,14 +106,14 @@ export default function CreatePost() {
         <Label>Category</Label>
 
         <select
-          value={product.categoryId}
+          value={product.category}
           onChange={(e) =>
-            setProduct({ ...product, categoryId: e.target.value })
+            setProduct({ ...product, category: e.target.value as Category })
           }
         >
-          {category.map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
+          {Object.values(Category).map((category) => (
+            <option key={category} value={category}>
+              {category}
             </option>
           ))}
         </select>

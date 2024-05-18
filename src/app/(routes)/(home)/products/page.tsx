@@ -1,13 +1,7 @@
+import { Category } from "@prisma/client";
 import React from "react";
+import { string } from "zod";
 import { ProductsGrid } from "~/components/products/products-grid";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 import Wrapper from "~/components/wrapper/wrapper";
 import { db } from "~/server/db";
 import { api } from "~/trpc/server";
@@ -19,29 +13,21 @@ export type PageProps = {
 
 const ProductsPage = async (props: PageProps) => {
   const totalProducts = await db.post.count();
-  const categories = await api.categories.getCategories();
   return (
     <>
       <Wrapper>
         <div>
-          <div className="flex justify-between">
-            <h1>Total Products: {totalProducts}</h1>
-            <div>
-              <h2>Filter By:</h2>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Categories" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={`${category.name}`}>
-                        {category.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+          <div className="flex flex-col gap-2">
+            <h1 className="mt-10 text-3xl font-bold">
+              Total Products: {totalProducts}
+            </h1>
+            <div className="flex gap-2">
+              <h1>Categories:</h1>
+              {Object.values(Category).map((value) => (
+                <div key={value} className="">
+                  <h1>{value}</h1>
+                </div>
+              ))}
             </div>
           </div>
           <ProductsGrid {...props} />
