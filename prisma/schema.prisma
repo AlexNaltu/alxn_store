@@ -25,7 +25,8 @@ model Post {
     createdAt   DateTime  @default(now())
     updatedAt   DateTime? @updatedAt
 
-    category   Category 
+    category Category
+
     @@index([name])
 }
 
@@ -80,4 +81,9 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model SearchQuery {
+    id    String @id @default(cuid())
+    query String
 }

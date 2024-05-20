@@ -17,6 +17,7 @@ const ImageCarousel = () => {
         infiniteLoop={true}
         interval={3500}
         transitionTime={2000}
+        showThumbs={false}
       >
         {carouselImages.map((image, index) => (
           <Image
@@ -25,6 +26,7 @@ const ImageCarousel = () => {
             alt={"/"}
             width={3000}
             height={1000}
+            className="aspect-square object-cover object-center min-[550px]:aspect-auto"
           />
         ))}
       </Carousel>
