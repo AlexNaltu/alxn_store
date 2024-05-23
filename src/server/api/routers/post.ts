@@ -74,40 +74,4 @@ export const postRouter = createTRPCRouter({
     return ctx.db.post.findMany({});
   }),
 
-  //search products procedure with query
-  searchProducts: publicProcedure
-    .input(z.object({ query: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const posts = ctx.db.post.findMany({
-        where: {
-          OR: [
-            {
-              name: {
-                contains: input.query,
-                mode: "insensitive",
-              },
-            },
-            {
-              description: {
-                contains: input.query,
-                mode: "insensitive",
-              },
-            },
-          ],
-        },
-      });
-
-      try {
-        await ctx.db.searchQuery.create({
-          data: {
-            query: input.query,
-          },
-        });
-      } catch (error) {
-        console.error("Failed to save search query to db", error);
-      }
-
-      return posts;
-    }),
-
 });

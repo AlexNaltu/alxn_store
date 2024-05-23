@@ -1,41 +1,77 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { trpc } from "~/app/_trpc/client";
 import { Input } from "../ui/input";
-import { IoIosSearch } from "react-icons/io";
-import { useRouter, useSearchParams } from "next/navigation";
+import SearchResults from "./search-results";
+import Fuse from "fuse.js";
+import { Post } from "@prisma/client";
+import debounce from "lodash.debounce";
 
-//searchbar component
 const Searchbar = () => {
-  //useSearchParams hook
-  const search = useSearchParams();
-  //useState hook to store search query
-  const [searchQuery, setSearchQuery] = useState<string | null>(
-    search ? search.get("q") : null,
+  // fetch products from the server
+  const products = trpc.post.getProducts.useQuery();
+  // state to store the search query
+  const [queryText, setQueryText] = useState("");
+  // state to store the search results
+  const [searchResults, setSearchResults] = useState<Post[] | undefined>(
+    products.data,
   );
-  const router = useRouter();
 
-  //onSearch function , if searchQuery is not a string return nothing
-  const onSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  // handle search input change
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQueryText(e.target.value);
+  };
 
-    if (typeof searchQuery !== "string") {
+  useEffect(() => {
+    // if !queryText, set searchResults to an empty array
+    if (!queryText) {
+      setSearchResults([]);
       return;
     }
-    // if searchQuery is a string , encode the searchQuery and push the search query to the router
-    const encodedSearchQuery = encodeURIComponent(searchQuery);
-    router.push(`/search?q=${encodedSearchQuery}`);
-  };
+
+    // creates a new Fuse instance with the products data and search options
+    const fuse = new Fuse(products.data || [], {
+      keys: ["name", "description"],
+      includeScore: true,
+    });
+
+    // search for the query text in the products data
+    const result = fuse.search(queryText);
+    console.log(result);
+
+    // transform the search results to only include the item
+    const transformedResults = result.map((r) => r.item);
+    setSearchResults(transformedResults);
+  }, [queryText, products.data]);
+
   return (
-    <form onSubmit={onSearch} className=" w-full items-center sm:inline-flex">
-      <IoIosSearch size={20} className="absolute mx-2" />
+    <div>
       <Input
-        type="search"
-        placeholder="Search..."
-        className="rounded-full pl-10"
-        onChange={(e) => setSearchQuery(e.target.value)}
+        type="text"
+        value={queryText}
+        onChange={handleChange}
+        placeholder="Search Products"
       />
-    </form>
+      {queryText && (
+        <div className="flex flex-col border-2 border-t-0 border-black ">
+          {searchResults?.map((result) => (
+            <SearchResults
+              key={result.id}
+              id={result.id}
+              name={result.name}
+              price={result.price}
+              quantity={result.quantity}
+              description={result.description}
+              image_url={result.image_url}
+              isInStock={result.isInStock}
+              createdAt={result.createdAt}
+              updatedAt={result.updatedAt}
+              category={result.category}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 

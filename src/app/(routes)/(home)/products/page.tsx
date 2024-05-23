@@ -5,7 +5,6 @@ import Searchbar from "~/components/searchbar/search-input";
 import { ProductsGrid } from "~/components/products/products-grid";
 import Wrapper from "~/components/wrapper/wrapper";
 import { db } from "~/server/db";
-import { api } from "~/trpc/server";
 
 // Page props with params and searchParams
 export type PageProps = {
@@ -19,8 +18,8 @@ const ProductsPage = async (props: PageProps) => {
   return (
     <>
       <Wrapper>
+        <Searchbar />
         <div className="flex flex-col items-center">
-          <Searchbar />
           <div className="flex flex-col gap-2 self-start">
             <h1 className="mt-10 text-3xl font-bold">
               Total Products: {totalProducts}
