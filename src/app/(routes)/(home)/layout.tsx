@@ -1,14 +1,17 @@
 import "~/styles/globals.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
-import { Inter } from "next/font/google";
+import { Lilita_One } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import Navbar from "~/components/navbar/navbar";
 import SignIn from "~/components/navbar/sign-in";
+import Footer from "~/components/footer/footer";
 
-const inter = Inter({
+const inter = Lilita_One({
   subsets: ["latin"],
-  variable: "--font-sans",
+  weight: "400",
 });
 
 export const metadata = {
@@ -24,11 +27,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={` ${inter.className} `}>
         <TRPCReactProvider>
-          <SignIn />
-          <Navbar />
-          {children}
+          <div className=" mx-auto my-2 flex min-h-screen max-w-screen-xl flex-col px-2 lg:px-6">
+            <SignIn />
+            <Navbar />
+            <main className="flex-auto"> {children}</main>
+            <Footer />
+          </div>
         </TRPCReactProvider>
       </body>
     </html>

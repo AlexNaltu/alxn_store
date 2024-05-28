@@ -10,7 +10,7 @@ import { Carousel } from "react-responsive-carousel";
 
 const ImageCarousel = () => {
   return (
-    <Wrapper>
+    <div>
       <Carousel
         autoPlay={true}
         swipeable={true}
@@ -30,7 +30,7 @@ const ImageCarousel = () => {
           />
         ))}
       </Carousel>
-    </Wrapper>
+    </div>
   );
 };
 

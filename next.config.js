@@ -24,6 +24,10 @@ const config = {
         protocol: "https",
         hostname: "www.myconbini.com",
       },
+      {
+        protocol: "https",
+        hostname: "www.japan-guide.com",
+      },
     ],
   },
 };

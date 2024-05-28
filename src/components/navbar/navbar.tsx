@@ -11,7 +11,7 @@ import LogIn from "./sign-in";
 const Navbar = () => {
   return (
     <>
-      <Wrapper>
+      <div>
         <nav className="flex items-center justify-between">
           <Link href={"/"}>
             <Image src={"/logo.svg"} alt="/" width={170} height={300} />
@@ -21,7 +21,7 @@ const Navbar = () => {
             <Favorites />
           </div>
         </nav>
-      </Wrapper>
+      </div>
     </>
   );
 };

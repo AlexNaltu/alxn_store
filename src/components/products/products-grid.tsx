@@ -56,8 +56,8 @@ export const ProductsGrid = async (props: PageProps) => {
   const { data, metadata } = await fetchFeed({ take, skip });
 
   return (
-    <Wrapper className="my-5 flex flex-col justify-center gap-4 sm:my-10 lg:my-14 lg:gap-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    <Wrapper className="flex flex-col gap-4">
+      <div className="my-5 grid grid-cols-1 justify-items-center gap-6 sm:my-10 sm:grid-cols-2 lg:my-14 lg:grid-cols-3 lg:gap-8 xl:grid-cols-4 xl:gap-14">
         {data.map((listing, i) => (
           <ProductsCard {...listing} key={i} />
         ))}

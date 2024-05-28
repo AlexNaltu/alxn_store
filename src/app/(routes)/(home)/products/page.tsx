@@ -5,6 +5,7 @@ import Searchbar from "~/components/searchbar/search-input";
 import { ProductsGrid } from "~/components/products/products-grid";
 import Wrapper from "~/components/wrapper/wrapper";
 import { db } from "~/server/db";
+import Categories from "~/components/category/categories";
 
 // Page props with params and searchParams
 export type PageProps = {
@@ -24,16 +25,9 @@ const ProductsPage = async (props: PageProps) => {
             <h1 className="mt-10 text-3xl font-bold">
               Total Products: {totalProducts}
             </h1>
-            <div className="flex gap-2">
-              <h1>Categories:</h1>
-              {Object.values(Category).map((value) => (
-                <div key={value} className="">
-                  <h1>{value}</h1>
-                </div>
-              ))}
-            </div>
+
+            <Categories />
           </div>
-          <ProductsGrid {...props} />
         </div>
       </Wrapper>
     </>

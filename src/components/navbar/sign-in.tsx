@@ -10,7 +10,7 @@ const SignIn = async () => {
   const session = await getServerAuthSession();
 
   return (
-    <Wrapper className="flex items-center justify-end gap-3 pt-2">
+    <div className="flex items-center justify-end gap-3 pt-2">
       <p>
         {session && (
           <Image
@@ -28,7 +28,7 @@ const SignIn = async () => {
         </Button>
       </Link>
       <AdminLink />
-    </Wrapper>
+    </div>
   );
 };
 

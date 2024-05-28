@@ -1,4 +1,4 @@
-import { Category } from "@prisma/client";
+import { Category, Post } from "@prisma/client";
 import { z } from "zod";
 import { createProductSchema } from "~/helpers/productRouteSchema";
 
@@ -74,4 +74,25 @@ export const postRouter = createTRPCRouter({
     return ctx.db.post.findMany({});
   }),
 
+  getCategoriesById: publicProcedure
+    .input(
+      z.object({
+        category: z
+          .enum(["Sushi", "Ramen", "Snacks", "Sauces", "Fresh"])
+          .optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const categoryFilter = input.category ? { category: input.category } : {};
+      return ctx.db.post.findMany({
+        where: categoryFilter,
+      });
+    }),
+
+  getBestSellers: publicProcedure.query(({ ctx }) => {
+    const products = ctx.db.$queryRaw<Post[]>`
+    SELECT * FROM "Post" ORDER BY RANDOM() LIMIT 4`;
+
+    return products;
+  }),
 });
